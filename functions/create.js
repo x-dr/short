@@ -20,7 +20,7 @@ export async function onRequestPost(context) {
     const originurl = new URL(request.url);
     const clientIP = request.headers.get("x-forwarded-for") || request.headers.get("clientIP");
     const userAgent = request.headers.get("user-agent");
-    const origin = `${originurl.protocol}://${originurl.hostname}`
+    const origin = `${originurl.protocol}//${originurl.hostname}`
 
     const options = {
         timeZone: 'Asia/Shanghai',
