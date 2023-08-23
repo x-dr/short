@@ -75,7 +75,9 @@ export async function onRequestPost(context) {
         const bodyUrl = new URL(url);
 
         if (bodyUrl.hostname === originurl.hostname) {
-            return Response.json({ message: 'You cannot shorten a link to the same domain.' })
+            return Response.json({ message: 'You cannot shorten a link to the same domain.' },{
+                status: 400
+            })
         }
 
         // 生成随机slug
