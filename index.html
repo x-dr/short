@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="asset/img/favicon.png"  >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>short</title>
+    <style>
+      :root {
+        --color-primary: #5c7cfa;
+        --color-primary-dark: #4263eb;
+        --color-primary-alpha: #5c7cfa50;
+
+        --body-color: #495057;
+        --body-bg: #f8f9fa;
+
+        --border-color: #dee2e6;
+      }
+
+      body {
+        max-width: 30rem;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        color: var(--body-color);
+        background: var(--body-bg);
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.5;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        text-rendering: optimizelegibility;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        color: var(--color-primary);
+        text-decoration: none;
+        transition: color .3s;
+      }
+
+      a:hover {
+        color: var(--color-primary);
+        text-decoration: underline;
+      }
+
+      h1 {
+        font-size: 5rem;
+        font-weight: 300;
+        text-align: center;
+        opacity: .2;
+      }
+
+      main[x-cloak] {
+        opacity: 0;
+      }
+
+      main:not([x-cloak]) {
+        opacity: 1;
+        transition: opacity .3s;
+      }
+
+      input {
+        -webkit-appearance: none;
+        appearance: none;
+        display: block;
+        width: 100%;
+        padding: .5rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: .25rem;
+        box-sizing: border-box;
+        color: #33404d;
+        line-height: inherit;
+        font-size: 1rem;
+        transition: border .3s, box-shadow .3s;
+      }
+
+      input:focus {
+        box-shadow: 0 0 0 .25rem var(--color-primary-alpha);
+        border-color: var(--color-primary);
+        outline: 0;
+      }
+
+      details {
+        margin: 1rem 0 2rem;
+        border: 1px solid var(--border-color);
+        border-radius: .25rem;
+        transition: background .3s;
+      }
+
+      details[open] {
+        background: #fff;
+      }
+
+      details summary {
+        padding: .5rem 1rem;
+        font-weight: 500;
+        user-select: none;
+        cursor: pointer;
+        opacity: .8;
+        outline: 0;
+      }
+
+      details div {
+        padding: 1rem;
+        border-top: 1px solid var(--border-color);
+      }
+
+      details small {
+        margin: 0;
+        font-size: .875rem;
+        line-height: 2;
+      }
+
+      button {
+        appearance: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 5rem;
+        padding: .5rem .75rem;
+        border: 1px solid var(--color-primary);
+        border-radius: .25rem;
+        background: var(--color-primary);
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: inherit;
+        cursor: pointer;
+        user-select: none;
+        transition: border .3s, background .3s,;
+      }
+
+      button:hover {
+        border-color: var(--color-primary-dark);
+        background: var(--color-primary-dark);
+      }
+
+      button:focus {
+        box-shadow: 0 0 0 .25rem var(--color-primary-alpha);
+        border-color: var(--color-primary);
+        outline: 0;
+      }
+
+      button:disabled {
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+        opacity: .6;
+        cursor: not-allowed;
+      }
+
+      button.loading::before {
+        content: '';
+        display: inline-block;
+        margin-right: .5rem;
+        border: 2px solid #fff;
+        border-top-color: transparent;
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        width: .75rem;
+        height: .75rem;
+        animation: rotate .5s linear infinite;
+      }
+
+      footer {
+        padding: 1rem;
+        border-top: 1px solid var(--border-color);
+        text-align: center;
+        opacity: .5;
+      }
+
+      footer i {
+        font-style: normal;
+        color: #ff8787;
+      }
+
+      .success,
+      .error {
+        margin-bottom: 1rem;
+        padding: .5rem 1rem;
+        border-radius: .25rem;
+        color: #fff;
+        text-align: center;
+        opacity: 1;
+        transition: opacity .3s;
+      }
+
+      .success {
+        border: 1px solid #12b886;
+        background: #38d9a9;
+      }
+
+      .error {
+        border: 1px solid #fa5252;
+        background: #ff8787;
+      }
+
+      @keyframes rotate {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header><h1>short</h1></header>
+    <main x-data="app" x-cloak>
+      <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
+      <input placeholder="输入要缩短的网址..." x-model="url" x-ref="url" />
+      <details>
+        <summary>自定义设置</summary>
+        <div>
+          <input placeholder="Custom slug" x-model="slug" />
+          <small>Slug 默认是随机生成的短 id。</small>
+        </div>
+      </details>
+      <button :class="{ loading }" :disabled="loading || isValidated()" @click="submit($refs, $nextTick)">生成</button>
+    </main>
+    <footer>
+     service
+    </footer>
+    <script src="asset/js/alpine.js"></script>
+    <script>
+      const app = {
+        url: '',
+        slug: '',
+        alert: null,
+        loading: false,
+        isValidated () {
+          return !/^https?:\/\/.{3,}/.test(this.url)
+        },
+        submit ($refs, $nextTick) {
+          if (!this.url) {
+            this.alert = { type: 'error', message: '缺少必需的参数：url。' }
+            return
+          }
+
+          if (this.isValidated()) {
+            this.alert = { type: 'error', message: '非法格式：url。' }
+            return
+          }
+
+          this.alert = null
+          this.loading = true
+
+          const body = { url: this.url }
+          if (this.slug) body.slug = this.slug
+
+          fetch('/create', {
+            method: 'post',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(body)
+          })
+            .then(res => res.json())
+            .then(res => {
+              this.loading = false
+              if (res.message) {
+                this.alert = { type: 'error', message: res.message }
+                return
+              }
+
+              this.url = res.link
+
+              $nextTick(() => {
+                $refs.url.select()
+                this.alert = { type: 'success', message: `链接 ${document.execCommand('Copy') ? '复制' : '生成'} ` }
+              })
+            })
+            .catch(e => {
+              this.alert = { type: 'error', message: e.message }
+              this.loading = false
+            })
+        }
+      }
+    </script>
+  </body>
+</html>

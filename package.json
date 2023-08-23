@@ -1,0 +1,29 @@
+{
+  "name": "short",
+  "version": "1.0.0",
+  "description": "A URL Shortener created using Cloudflare Pages",
+  "main": "index.js",
+  "dependencies": {
+    "wrangler": "^3.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "wrangler pages dev . --d1=short",
+    "clear": "kill -9 $(pgrep workerd)",
+    "d1": "wrangler d1 execute short --local --file=./short.sql"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/x-dr/short.git"
+  },
+  "keywords": [
+    "short",
+    "url"
+  ],
+  "author": "x-dr",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/x-dr/short/issues"
+  },
+  "homepage": "https://github.com/x-dr/short#readme"
+}

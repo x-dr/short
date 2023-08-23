@@ -1,0 +1,44 @@
+/**
+ * @param {string} slug
+ */
+
+export async function onRequestGet(context) {
+    const { request, env, params } = context;
+    // const url = new URL(request.url);
+    const clientIP = request.headers.get("x-forwarded-for") || request.headers.get("clientIP");
+    const userAgent = request.headers.get("user-agent");
+    const Referer = request.headers.get('Referer') || "Referer"
+    const originurl = new URL(request.url);
+    const options = {
+        timeZone: 'Asia/Shanghai',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    };
+    const timedata = new Date();
+    const formattedDate = new Intl.DateTimeFormat('zh-CN', options).format(timedata);
+
+    const slug = params.id;
+
+    const Url = await env.DB.prepare(`SELECT url FROM links where slug = '${slug}'`).first()
+
+    if (!Url) {
+        return Response.status(404).json({ message: 'Not Found.' })
+    } else {
+        try {
+            const info = await env.DB.prepare(`INSERT INTO logs (url, slug, ip,referer,  ua, create_time) 
+            VALUES ('${Url.url}', '${originurl}', '${clientIP}','${Referer}', '${userAgent}', '${formattedDate}')`).run()
+            // console.log(info);
+            return Response.redirect(Url.url, 302);
+            
+        } catch (error) {
+            console.log(error);
+            return Response.redirect(Url.url, 302);
+        }
+    }
+
+}
