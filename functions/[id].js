@@ -31,7 +31,7 @@ export async function onRequestGet(context) {
     } else {
         try {
             const info = await env.DB.prepare(`INSERT INTO logs (url, slug, ip,referer,  ua, create_time) 
-            VALUES ('${Url.url}', '${originurl}', '${clientIP}','${Referer}', '${userAgent}', '${formattedDate}')`).run()
+            VALUES ('${Url.url}', '${slug}', '${clientIP}','${Referer}', '${userAgent}', '${formattedDate}')`).run()
             // console.log(info);
             return Response.redirect(Url.url, 302);
             
