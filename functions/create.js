@@ -72,8 +72,15 @@ export async function onRequestPost(context) {
         if (existSlug && !slug) {
             return Response.json({ slug: existSlug.existSlug, link: `${origin}/${existSlug.existSlug}` })
         }
+        const bodyUrl = new URL(url);
+
+        if (bodyUrl.hostname === originurl.hostname) {
+            return Response.json({ message: 'You cannot shorten a link to the same domain.' })
+        }
+
+        // 生成随机slug
         const slug2 = slug ? slug : generateRandomString(4);
-        console.log('slug', slug2);
+        // console.log('slug', slug2);
 
         const info = await env.DB.prepare(`INSERT INTO links (url, slug, ip, status, ua, create_time) 
         VALUES ('${url}', '${slug2}', '${clientIP}',1, '${userAgent}', '${formattedDate}')`).run()
