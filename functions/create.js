@@ -43,10 +43,13 @@ export async function onRequestPost(context) {
         return Response.json({ message: 'Illegal format: url.' })
     }
 
-    // 自定义slug长度检查 2<slug<10
-    if (slug && (slug.length < 2 || slug.length > 10)) {
-        return Response.json({ message: 'Illegal length: slug, (>= 2 && <= 10).' })
+    // 自定义slug长度检查 2<slug<10 是否不以文件后缀结尾
+    if (slug && (slug.length < 2 || slug.length > 10 || /.+\.[a-zA-Z]+$/.test(slug))) {
+        return Response.json({ message: 'Illegal length: slug, (>= 2 && <= 10), or not ending with a file extension.' });
     }
+    
+    
+
 
     try {
 
@@ -75,7 +78,7 @@ export async function onRequestPost(context) {
         const bodyUrl = new URL(url);
 
         if (bodyUrl.hostname === originurl.hostname) {
-            return Response.json({ message: 'You cannot shorten a link to the same domain.' },{
+            return Response.json({ message: 'You cannot shorten a link to the same domain.' }, {
                 status: 400
             })
         }

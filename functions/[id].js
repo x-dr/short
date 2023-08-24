@@ -1,6 +1,7 @@
 /**
  * @param {string} slug
  */
+import page404 from './404.html'
 
 export async function onRequestGet(context) {
     const { request, env, params } = context;
@@ -27,7 +28,7 @@ export async function onRequestGet(context) {
     const Url = await env.DB.prepare(`SELECT url FROM links where slug = '${slug}'`).first()
 
     if (!Url) {
-        return new Response("404 Not Found", {
+        return new Response(page404, {
             status: 404,
             headers: {
                 "content-type": "text/html;charset=UTF-8",
