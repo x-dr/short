@@ -27,7 +27,7 @@ export async function onRequestGet(context) {
     const Url = await env.DB.prepare(`SELECT url FROM links where slug = '${slug}'`).first()
 
     if (!Url) {
-        return Response.status(404).json({ message: 'Not Found.' })
+        return new Response(JSON.stringify({ message: 'Not Found.' }), { status: 404 })
     } else {
         try {
             const info = await env.DB.prepare(`INSERT INTO logs (url, slug, ip,referer,  ua, create_time) 
