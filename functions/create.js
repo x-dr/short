@@ -15,7 +15,19 @@ function generateRandomString(length) {
 
     return result;
 }
-export async function onRequestPost(context) {
+
+export async function onRequest(context) {
+    if (context.request.method === 'OPTIONS') {
+        return new Response(null, {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Max-Age': '86400', // 24小时
+            },
+        });
+    }
+// export async function onRequestPost(context) {
     const { request, env } = context;
     const originurl = new URL(request.url);
     const clientIP = request.headers.get("x-forwarded-for") || request.headers.get("clientIP");
