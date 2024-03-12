@@ -42,7 +42,9 @@ CREATE TABLE IF NOT EXISTS logs (
 ```
 8. 选择部署完成short项目，前往后台依次点击`设置`->`函数`->`D1 数据库绑定`->`编辑绑定`->变量名称填写：`DB` 命名空间 `选择你提前创建好的D1` 数据库绑定
 
-9. 重新部署项目，完成。
+9. 重新部署项目，完成。使用Cloudflare Pages自动分配的域名访问（https://??????.pages.dev）
+
+10. [可选] 选择short项目，点击`Custom domains`, 文本框内输入自有域名可以使用定制域名（如d.131213.xyz）。如果域名是用Cloudflare管理的话会自动添加CNAME记录，否则需要手动添加域名的CNAME记录。 
 
 
 ### API
