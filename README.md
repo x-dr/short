@@ -4,7 +4,9 @@
 
 *Demo* : [https://d.131213.xyz/](https://d.131213.xyz/)
 
+### 视频教程
 
+https://youtu.be/f3JmhwTvG5I
 
 ### 利用Cloudflare pages部署
 
