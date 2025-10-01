@@ -49,7 +49,12 @@ CREATE TABLE IF NOT EXISTS logs (
 ```
 8. 选择部署完成short项目，前往后台依次点击`设置`->`函数`->`D1 数据库绑定`->`编辑绑定`->变量名称填写：`DB` 命名空间 `选择你提前创建好的D1` 数据库绑定
 
-9. 重新部署项目，完成。
+9. （可选）如需启用访问令牌保护，前往`设置`->`环境变量`，添加环境变量：
+   - 变量名称：`ACCESS_TOKEN`
+   - 值：设置你的访问令牌（例如：`your-secret-token-here`）
+   - 如果设置了此环境变量，所有创建短链接的请求都需要在 Authorization 头中提供该令牌
+
+10. 重新部署项目，完成。
 
 
 ### API
@@ -62,6 +67,9 @@ curl -X POST -H "Content-Type: application/json" -d '{"url":"https://131213.xyz"
 
 # 指定slug
 curl -X POST -H "Content-Type: application/json" -d '{"url":"https://131213.xyz","slug":"scxs"}' https://d.131213.xyz/create
+
+# 使用访问令牌（如果服务器设置了 ACCESS_TOKEN 环境变量）
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer your-token-here" -d '{"url":"https://131213.xyz"}' https://d.131213.xyz/create
 
 ```
 

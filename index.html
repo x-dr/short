@@ -213,6 +213,10 @@
           <input placeholder="slug" x-model="slug" />
           <small>Slug 默认是随机生成的短 id。</small>
         </div>
+        <div>
+          <input placeholder="access token (可选)" x-model="token" type="password" />
+          <small>如果服务器设置了访问令牌，请在此输入。</small>
+        </div>
       </details>
       <button :class="{ loading }" :disabled="loading || isValidated()" @click="submit($refs, $nextTick)">生成</button>
     </main>
@@ -224,6 +228,7 @@
       const app = {
         url: '',
         slug: '',
+        token: '',
         alert: null,
         loading: false,
         isValidated () {
@@ -246,9 +251,12 @@
           const body = { url: this.url }
           if (this.slug) body.slug = this.slug
 
+          const headers = { 'content-type': 'application/json' }
+          if (this.token) headers['Authorization'] = `Bearer ${this.token}`
+
           fetch('/create', {
             method: 'post',
-            headers: { 'content-type': 'application/json' },
+            headers: headers,
             body: JSON.stringify(body)
           })
             .then(res => res.json())

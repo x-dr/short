@@ -22,7 +22,7 @@ export async function onRequest(context) {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
                 'Access-Control-Max-Age': '86400', // 24小时
             },
         });
@@ -49,9 +49,23 @@ export async function onRequest(context) {
     const { url, slug } = await request.json();
     const corsHeaders = {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         'Access-Control-Max-Age': '86400', // 24 hours
     };
+
+    // Check ACCESS_TOKEN if set
+    if (env.ACCESS_TOKEN) {
+        const authHeader = request.headers.get('Authorization');
+        const token = authHeader?.replace('Bearer ', '');
+        
+        if (!token || token !== env.ACCESS_TOKEN) {
+            return Response.json({ message: 'Unauthorized: Invalid or missing access token.' }, {
+                headers: corsHeaders,
+                status: 401
+            });
+        }
+    }
+
     if (!url) return Response.json({ message: 'Missing required parameter: url.' });
 
     // url格式检查
